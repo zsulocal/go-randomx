@@ -215,6 +215,22 @@ func CalculateHash(vm *C.randomx_vm, in []byte) []byte {
 	return out
 }
 
+
+func LightHash(seed []byte, input []byte) []byte {
+	var cache *C.randomx_cache
+    cache = C.randomx_alloc_cache(110)
+	C.randomx_init_cache(cache, unsafe.Pointer(&seed[0]), C.size_t(len(seed)))
+	var dataset *C.randomx_dataset
+	dataset = C.randomx_alloc_dataset(110)
+	var length C.ulong
+	length = C.randomx_dataset_item_count()
+	C.randomx_init_dataset(dataset, cache, C.ulong(0), C.ulong(uint32(length)))
+	vm := C.randomx_create_vm(110, cache, dataset);
+	out := make([]byte, C.RANDOMX_HASH_SIZE)
+	C.randomx_calculate_hash(vm, unsafe.Pointer(&input[0]), C.size_t(len(input)), unsafe.Pointer(&out[0]))
+    return out
+}
+
 func CalculateHashFirst(vm *C.randomx_vm, in []byte) {
 	if vm == nil {
 		panic("failed hashing: using empty vm")
