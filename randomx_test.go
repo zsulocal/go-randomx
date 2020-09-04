@@ -191,3 +191,11 @@ func BenchmarkCalculateHash(b *testing.B) {
 
 	DestroyVM(vm)
 }
+
+func TestRandomx(t *testint.T) {
+
+	seed, _ := hex.DecodeString("7722b244434547eda38e60c32a9dacc6ef480d5244bd7e747092b1c361d9e7d1")
+	input, _ := hex.DecodeString("dedea5191850ebf083bd14798024e3de1f72fa865cf996d8cdc36003011d5b161777000000000000000000000000000000000000000000000000000000000000b69f3de5f1c0a875879db8fef4a54f67bcbcc5e8a0165f3a06d07a4160d6f566")
+	work := LightHash(seed, input)
+	fmt.Println(hex.EncodeToString(work))
+}
